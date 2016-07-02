@@ -1,4 +1,44 @@
-var colorPalette2 = function (level) {
+
+var colorPaletteBlue = function (level) {
+
+    var color;
+
+    switch (level) {
+        case 0:
+            color = "#0d47a1";
+            break;
+        case 1:
+            color = "#1565c0";
+            break;
+        case 2:
+            color = "#1976d2";
+            break;
+        case 3:
+            color = "#1e88e5";
+            break;
+        case 4:
+            color = "#2196f3";
+            break;
+        case 5:
+            color = "#42a5f5";
+            break;
+        case 6:
+            color = "#64b5f6";
+            break;
+        case 7:
+            color = "#90caf9";
+            break;
+        case 8:
+            color = "#bbdefb";
+            break;
+        case 9:
+            color = "#e3f2fd";
+            break;
+    }
+    return {'background-color': color}
+};
+
+var colorPaletteSpectrum = function (level) {
 
     var color;
 
@@ -37,7 +77,7 @@ var colorPalette2 = function (level) {
     return {'background-color': color}
 };
 
-var colorPalette = function (level) {
+var colorPaletteRed = function (level) {
 
     var color;
 
@@ -83,7 +123,7 @@ var getLevel = function (currentPosition, totalLength) {
 
 var app = angular.module('ngTopTenTaxiZonesApp');
 
-app.controller('stompgridController', ['$scope', '$stomp', function($scope, $stomp){
+app.controller('stompgridController', ['$scope', '$stomp', 'growl', function($scope, $stomp, growl){
 
     $scope.connect = function () {
         var connectHeaders = {};
@@ -92,11 +132,15 @@ app.controller('stompgridController', ['$scope', '$stomp', function($scope, $sto
 
         $stomp.connect($scope.model.url, connectHeaders)
             .then(function (frame) {
+                
+                growl.success('Connected!');
                 console.log('Connected: ' + frame);
 
                 subscribe();
             })
             .catch(function(reason) {
+
+                growl.error('Connection error:' + reason);
                 console.error('Connection error:', reason);
 
             });
@@ -104,9 +148,10 @@ app.controller('stompgridController', ['$scope', '$stomp', function($scope, $sto
 
     // Disconnect
     $scope.disconnect = function () {
-        $stomp.connect().then(
+        $stomp.disconnect().then(
             function () {
                 console.log('Disconnected');
+                growl.warning('Disconnected!');
             });        
     };
     
@@ -132,6 +177,17 @@ app.controller('stompgridController', ['$scope', '$stomp', function($scope, $sto
         //$scope.model.rowCollection.push(JSON.parse(res.body));
 
         console.log(JSON.parse(res.body).payload);
+
+        var msgTimestamp = JSON.parse(JSON.parse(res.body).payload).timestamp;
+        var msgDate = new Date(msgTimestamp);
+        var from = JSON.parse(JSON.parse(res.body).payload).from;
+        var to = JSON.parse(JSON.parse(res.body).payload).to;
+        var delay = JSON.parse(JSON.parse(res.body).payload).delay;
+        var count = JSON.parse(JSON.parse(res.body).payload).count;
+        
+        growl.info(from + ' ' + to + ' @ ' + msgDate.toLocaleTimeString() 
+            + ' Count:' + count
+            + ' Delayed:' + delay + 'ms');
         
 
         $scope.model.rowCollection = JSON.parse(JSON.parse(res.body).payload).toptenlist;
@@ -152,8 +208,8 @@ app.controller('stompgridController', ['$scope', '$stomp', function($scope, $sto
         $scope.model.pwd = 'guest';
         // $scope.model.pwd = 'password';
         $scope.model.subdest = '/topic/topten';
-        $scope.model.pubdest = '/topic/dest';
-        $scope.model.payload = '{"name":"Tom", "type":"Type0", "sales":50}';
+        // $scope.model.pubdest = '/topic/dest';
+        // $scope.model.payload = '{"name":"Tom", "type":"Type0", "sales":50}';
         $scope.model.headers = '{}';
 
         // setup for ag-grid
@@ -176,7 +232,7 @@ app.controller('stompgridController', ['$scope', '$stomp', function($scope, $sto
                 // return null;
                 // console.log(JSON.stringify(params.data));
                 var level = getLevel(params.data.rank - 1, $scope.model.rowCollection.length)
-                return colorPalette(level);
+                return colorPaletteBlue(level);
             }
 
         };

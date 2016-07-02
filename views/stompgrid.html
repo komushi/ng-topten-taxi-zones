@@ -1,18 +1,25 @@
-<div class="row">
-  <div class="col-md-3">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="form-group">
-          <button ng-click="connect()">Connect</button>
-        </div>
-      </div>      
+<div growl></div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-1 col-md-1">
+      <div class="form-group">
+        <button ng-click="connect()">Connect</button>
+      </div>
+    </div>
+    <div class="col-sm-1 col-md-1">
+      <div class="form-group">
+        <button ng-click="disconnect()">Disconnect</button>
+      </div>
     </div>
   </div>
-  <div class="col-md-9">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="table-container">
-          <div ag-grid="gridOptions" class="ag-fresh" style="height: 800px; width: 100%;"></div>
+  <div class="row">
+    <div class="col-sm-3 col-md-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Panel with panel-warning class</div>
+        <div class="panel-body">
+          <div class="table-container">
+            <div ag-grid="gridOptions" class="ag-fresh" style="height: 100%; width: 100%;"></div>
+          </div>
         </div>
       </div>
     </div>

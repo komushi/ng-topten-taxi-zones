@@ -10,6 +10,7 @@
     "angular-route": "1.5.6",
     "bootstrap": "3.3.*",
     "ng-stomp-notify": "0.6.*",
-    "ag-grid": "4.2.*"
+    "ag-grid": "4.2.*",
+    "angular-growl-v2": "0.7.9"
   }
 }

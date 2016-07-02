@@ -3,15 +3,18 @@ agGrid.initialiseAgGridWithAngular1(angular);
 var app =  angular.module('ngTopTenTaxiZonesApp', [
 	'ngRoute',
 	'agGrid',
-	'ngStomp'
+	'ngStomp',
+	'angular-growl'
 ]);
 
 
-app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+app.config(['$routeProvider', '$locationProvider', 'growlProvider', function($routeProvider, $locationProvider, growlProvider) {
 
 	// $locationProvider.html5Mode(true);
 	// $locationProvider.hashPrefix = '#';
 
+	growlProvider.globalTimeToLive(5000);
+	growlProvider.onlyUniqueMessages(false);
 
 
 	$routeProvider.
