@@ -123,7 +123,7 @@ var getLevel = function (currentPosition, totalLength) {
 
 var app = angular.module('ngTopTenTaxiZonesApp');
 
-app.controller('stompgridController', ['$scope', '$stomp', 'growl', function($scope, $stomp, growl){
+app.controller('stompgridController', ['$scope', '$stomp', 'growl', '$translate', '$asyncTranslator', '$q', function($scope, $stomp, growl, $translate, $asyncTranslator, $q){
 
     $scope.connect = function () {
         var connectHeaders = {};
@@ -155,13 +155,17 @@ app.controller('stompgridController', ['$scope', '$stomp', 'growl', function($sc
             });        
     };
     
+    $scope.changeLanguage = function(localeCode) {
+        $asyncTranslator.setLocaleCode(localeCode);
+        $rootScope.$broadcast('rootScope:localeChanged', localeCode);
+    };
 
     // Subscribe a queue
     var subscribe = function () {
         
         var headers = {};
 
-        $stomp.subscribe($scope.model.subdest, headers).then(null,null,updateGrid);
+        $stomp.subscribe($scope.model.subdest, headers).then(null,null,updateGridMatrix);
     };
 
     // Unsubscribe a queue
@@ -170,33 +174,125 @@ app.controller('stompgridController', ['$scope', '$stomp', 'growl', function($sc
     };
 
     // notify callback function
-    var updateGrid = function (res) {
-        // console.log('res');
-        // console.log(res.headers);
-        
-        //$scope.model.rowCollection.push(JSON.parse(res.body));
+    var updateGridMatrix = function (res) {
 
-        console.log(JSON.parse(res.body).payload);
+        var payload = JSON.parse(JSON.parse(res.body).payload);
 
-        var msgTimestamp = JSON.parse(JSON.parse(res.body).payload).timestamp;
+        console.log(JSON.stringify(payload));
+
+        var msgTimestamp = payload.timestamp;
         var msgDate = new Date(msgTimestamp);
-        var from = JSON.parse(JSON.parse(res.body).payload).from;
-        var to = JSON.parse(JSON.parse(res.body).payload).to;
-        var delay = JSON.parse(JSON.parse(res.body).payload).delay;
-        var count = JSON.parse(JSON.parse(res.body).payload).count;
+        var from = payload.from;
+        var to = payload.to;
+        var delay = payload.delay;
+        var count = payload.count;
         
-        growl.info(from + ' ' + to + ' @ ' + msgDate.toLocaleTimeString() 
+        growl.info(from + ' => ' + to
             + ' Count:' + count
             + ' Delayed:' + delay + 'ms');
         
+        lazyTranslateInit(payload);
 
-        $scope.model.rowCollection = JSON.parse(JSON.parse(res.body).payload).toptenlist;
+        translatePayload(payload).then(function(){
+            $scope.model.rowCollection = payload.toptenlist;
 
-        $scope.gridOptions.rowData = $scope.model.rowCollection;
-        $scope.gridOptions.api.setRowData($scope.gridOptions.rowData);
+            $scope.gridOptions.rowData = $scope.model.rowCollection;
+            $scope.gridOptions.api.setRowData($scope.gridOptions.rowData);
+
+            $scope.matrixJson = payload.matrix;
+        });
+
+    };
+
+    var lazyTranslateInit = function (payload) {
+
+        xInfos = [];
+
+        payload.toptenlist.forEach(function(item, i) {
+
+            var fromX = parseInt((item.from.split(".")[0]).split("C")[1]);
+            var toX = parseInt((item.to.split(".")[0]).split("C")[1]);
+
+            if (xInfos.indexOf(fromX) == -1) {
+                xInfos.push(fromX);
+            }
+
+            if (xInfos.indexOf(toX) == -1) {
+                xInfos.push(toX);
+            }
+
+        });
+
+        $asyncTranslator.setXInfos(xInfos);
+        $translate.use('ja-JP');
+    }
+
+
+
+    var translateProm = function(code) {
+        // if the translate promise fails,
+        // it will now be resolved and return 'undefined' instead
+
+        var deferred = $q.defer();
+
+        $translate(code)
+            .then(function(data){
+                var rtn = {"code":code, "name":data};
+                deferred.resolve(rtn);
+
+            })
+            .catch(function(){
+                var rtn = {"code":code, "name":code};
+                deferred.resolve(rtn);
+                
+            });
+
+        return deferred.promise;
 
         
-    };
+    }
+
+    var translatePayload = function (payload) {
+
+        var deferred = $q.defer();
+        // var promises = [];
+
+
+
+        var codes = [];
+        payload.matrix.nodes.forEach(function(item, i) {
+
+            if (codes.indexOf(item.name) == -1) {
+                codes.push(item.name);
+            }
+        });
+
+        $q.all(codes.map(translateProm)).then(
+            function(translatedList) {
+                var translatedObjs = {};
+
+                translatedList.forEach(function(item) {
+                    translatedObjs[item.code] = item.name;
+                });
+
+                payload.toptenlist.forEach(function(item) {
+
+                    item.from = translatedObjs[item.from];
+                    item.to = translatedObjs[item.to];
+
+                });
+
+                payload.matrix.nodes.forEach(function(node) {
+
+                    node.name = translatedObjs[node.name];
+                });
+
+                deferred.resolve(payload);
+            });
+
+        return deferred.promise;
+
+    }
 
     var initialize = function () {
         $scope.model = {}
@@ -234,10 +330,11 @@ app.controller('stompgridController', ['$scope', '$stomp', 'growl', function($sc
                 var level = getLevel(params.data.rank - 1, $scope.model.rowCollection.length)
                 return colorPaletteBlue(level);
             }
-
         };
 
-
+        // $asyncTranslator.setLocaleCode('ja-JP');
+        // $asyncTranslator.setXInfos([151]);
+        // $translate.use('ja-JP');
     };
 
     initialize();

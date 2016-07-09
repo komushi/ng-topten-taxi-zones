@@ -2,9 +2,14 @@
 <html>
 	<head>
 	  <title>Real-time Top 10 Taxi Zones</title>
-	    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-	    <link rel="stylesheet" href="css/app.css" />
-	    <link rel="stylesheet" href="bower_components/angular-growl-v2/build/angular-growl.min.css" />
+	    <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+	    <link rel="stylesheet" type="text/css" href="css/app.css" />
+	    <link rel="stylesheet" type="text/css" href="bower_components/angular-growl-v2/build/angular-growl.min.css" />
+	    <link rel="stylesheet" type="text/css" href="bower_components/ng-d3matrix/dist/css/ng-d3matrix.min.css" />
+
+		<link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="bower_components/flag-icon-css/css/flag-icon.min.css">
+		<link rel="stylesheet" type="text/css" href="bower_components/angular-language-picker/dist/angular-language-picker.min.css">
 		<!-- <base href="/"> -->
 	</head>
 
@@ -15,6 +20,7 @@
 			<ol class="breadcrumb">
 			  <li><a href="#/stompgrid">Real-time Top 10 Taxi Zones</a></li>
 			</ol>
+
 			<ng-view></ng-view>
 		</div>
 
@@ -23,14 +29,30 @@
 		<!-- ngStomp -->
 		<script src="bower_components/sockjs-client/dist/sockjs.min.js"></script>
 		<script src="bower_components/stomp-websocket/lib/stomp.js"></script>
-		<script src="bower_components/ng-stomp-notify/dist/ng-stomp.min.js"></script>
+		<!-- <script src="bower_components/ng-stomp-notify/dist/ng-stomp.min.js"></script> -->
+		<script src="bower_components/ng-stomp-notify/src/ng-stomp.js"></script>
 		<!-- ag-grid -->
 		<script src="bower_components/ag-grid/dist/ag-grid.min.js"></script>
 		<!-- angular-growl-v2 -->
 		<script src="bower_components/angular-growl-v2/build/angular-growl.min.js"></script>
+		<!-- ng-d3matrix -->
+		<script src="bower_components/d3/d3.min.js"></script>
+		<script src="bower_components/ng-d3matrix/dist/ng-d3matrix.min.js"></script>
+		<!-- angular-language-picker -->
+	    <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+	    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+	    <script src="bower_components/angular-language-picker/dist/angular-language-picker.js"></script>
+	    <script src="bower_components/angular-language-picker/dist/angular-language-picker.templates.js"></script>
+	    <!-- angular-translate -->
+		<script src="bower_components/angular-translate/angular-translate.js"></script>
+		<!-- angular-translate -->
+		<script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
 		<!-- app related -->
 		<script src="js/app.js"></script>
 		<script src="js/controllers/stompgridController.js"></script>
-		
+		<script src="js/services/services.js"></script>
+	    <script src="js/services/dataService.js"></script>
+	    <script src="js/services/asyncTranslator.js"></script>
+
 	</body>
 </html>
