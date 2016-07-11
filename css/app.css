@@ -1,6 +1,11 @@
 .table-container{
-    height:500px;
+    height:320px;
     overflow-y:scroll;
 
 }
 
+.ag-cell{
+  font-size: 14px;
+  font-family: 'Noto Sans Japanese', 'Klee', 'Meiryo';
+  font-weight: 300;
+}

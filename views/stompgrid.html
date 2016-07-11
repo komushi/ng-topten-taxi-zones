@@ -1,22 +1,20 @@
-<div growl></div>
 
 <div class="container-fluid">
+  <div growl></div>
   <div class="row">
-    <div class="col-sm-1 col-md-1">
+    <div class="col-sm-12 col-md-12">
       <div class="form-group">
-        <button ng-click="connect()">Connect</button>
-      </div>
-    </div>
-    <div class="col-sm-2 col-md-2">
-      <div class="form-group">
-        <button ng-click="disconnect()">Disconnect</button>
+        <div class="btn-group" role="group" aria-label="...">
+          <button type="button" class="btn btn-default" ng-click="connect()">{{'Connect' | translate}}</button>
+          <button type="button" class="btn btn-default" ng-click="disconnect()">{{'Disconnect' | translate}}</button>
+        </div>
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-3 col-md-4">
+    <div class="col-sm-5 col-md-5">
       <div class="panel panel-primary">
-        <div class="panel-heading">Top Ten List</div>
+        <div class="panel-heading">{{'top_ten_list' | translate}}</div>
         <div class="panel-body">
           <div class="table-container">
             <div ag-grid="gridOptions" class="ag-fresh" style="height: 100%; width: 100%;"></div>
@@ -24,9 +22,9 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-9 col-md-8">
+    <div class="col-sm-7 col-md-7">
       <div class="panel panel-primary">
-        <div class="panel-heading">Top Ten Matrix</div>
+        <div class="panel-heading">{{'top_ten_matrix' | translate}}</div>
         <div class="panel-body">
           <div adjacency-matrix
             data="matrixJson"

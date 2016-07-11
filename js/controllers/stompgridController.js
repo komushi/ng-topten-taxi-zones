@@ -123,7 +123,8 @@ var getLevel = function (currentPosition, totalLength) {
 
 var app = angular.module('ngTopTenTaxiZonesApp');
 
-app.controller('stompgridController', ['$scope', '$stomp', 'growl', '$translate', '$asyncTranslator', '$q', function($scope, $stomp, growl, $translate, $asyncTranslator, $q){
+app.controller('stompgridController', ['$scope', '$rootScope', '$stomp', 'growl', '$translate', '$asyncTranslator', '$q', 
+    function($scope, $rootScope, $stomp, growl, $translate, $asyncTranslator, $q){
 
     $scope.connect = function () {
         var connectHeaders = {};
@@ -160,6 +161,15 @@ app.controller('stompgridController', ['$scope', '$stomp', 'growl', '$translate'
         $rootScope.$broadcast('rootScope:localeChanged', localeCode);
     };
 
+    // translation when new language is selected
+    $scope.$on('rootScope:localeChanged', function(event, localeCode) {
+        if (localeCode) {
+            // $asyncTranslator.setViewInfos(viewSummary.viewInfos);
+            $translate.use(localeCode);
+        }
+    });
+
+
     // Subscribe a queue
     var subscribe = function () {
         
@@ -187,21 +197,44 @@ app.controller('stompgridController', ['$scope', '$stomp', 'growl', '$translate'
         var delay = payload.delay;
         var count = payload.count;
         
-        growl.info(from + ' => ' + to
-            + ' Count:' + count
-            + ' Delayed:' + delay + 'ms');
-        
-        lazyTranslateInit(payload);
 
-        translatePayload(payload).then(function(){
+
+        if ($rootScope.localeCode == 'en-US') {
+
+            growl.info(from + ' => ' + to
+                + ' Count:' + count
+                + ' Delayed:' + delay + 'ms');
+
             $scope.model.rowCollection = payload.toptenlist;
 
             $scope.gridOptions.rowData = $scope.model.rowCollection;
             $scope.gridOptions.api.setRowData($scope.gridOptions.rowData);
 
             $scope.matrixJson = payload.matrix;
-        });
+        } 
+        else {
+            lazyTranslateInit(payload);
 
+            $translate([from, to, 'Count', 'Delayed'])
+                .then(function (translations) {
+                    console.log(JSON.stringify(translations));
+                    growl.info(translations[from] + ' => ' + translations[to]
+                        + ' ' + translations['Count'] + ':' + count
+                        + ' ' + translations['Delayed'] + ':' + delay + 'ms');
+                    
+                });
+
+            translatePayload(payload).then(function(){
+                console.log(JSON.stringify(payload));
+                
+                $scope.model.rowCollection = payload.toptenlist;
+
+                $scope.gridOptions.rowData = $scope.model.rowCollection;
+                $scope.gridOptions.api.setRowData($scope.gridOptions.rowData);
+
+                $scope.matrixJson = payload.matrix;
+            });
+        }        
     };
 
     var lazyTranslateInit = function (payload) {
@@ -224,7 +257,7 @@ app.controller('stompgridController', ['$scope', '$stomp', 'growl', '$translate'
         });
 
         $asyncTranslator.setXInfos(xInfos);
-        $translate.use('ja-JP');
+        $translate.use($rootScope.localeCode);
     }
 
 
@@ -312,10 +345,10 @@ app.controller('stompgridController', ['$scope', '$stomp', 'growl', '$translate'
         $scope.model.rowCollection = [];
 
         var columnDefs = [
-            {headerName: "Rank", field: "rank"},
+            {headerName: "Rank", field: "rank", width: 60},
             {headerName: "From", field: "from"},
             {headerName: "To", field: "to"},
-            {headerName: "Count", field: "count"}
+            {headerName: "Count", field: "count", width: 60}
         ];
 
         $scope.gridOptions = {
@@ -325,16 +358,15 @@ app.controller('stompgridController', ['$scope', '$stomp', 'growl', '$translate'
                 event.api.sizeColumnsToFit();
             },
             getRowStyle: function(params) {
-                // return null;
-                // console.log(JSON.stringify(params.data));
                 var level = getLevel(params.data.rank - 1, $scope.model.rowCollection.length)
                 return colorPaletteBlue(level);
             }
         };
 
-        // $asyncTranslator.setLocaleCode('ja-JP');
-        // $asyncTranslator.setXInfos([151]);
-        // $translate.use('ja-JP');
+        // initial translation
+        if ($rootScope.localeCode) {
+            $translate.use($rootScope.localeCode);
+        }
     };
 
     initialize();

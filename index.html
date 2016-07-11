@@ -10,15 +10,17 @@
 		<link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="bower_components/flag-icon-css/css/flag-icon.min.css">
 		<link rel="stylesheet" type="text/css" href="bower_components/angular-language-picker/dist/angular-language-picker.min.css">
-		<!-- <base href="/"> -->
 	</head>
 
 
 	<body ng-app="ngTopTenTaxiZonesApp">
 
-		<div class="container">
+		<div class="container-fluid" ng-controller="mainCtrl">
 			<ol class="breadcrumb">
-			  <li><a href="#/stompgrid">Real-time Top 10 Taxi Zones</a></li>
+			  	<li><a href="#/stompgrid">{{'stompgrid_title' | translate}}</a></li>
+				<li>
+					<language-picker languages="['en-US', 'ja-JP']" on-change="changeLanguage(language.code)">{{'Language' | translate}}</language-picker>
+				</li>
 			</ol>
 
 			<ng-view></ng-view>
@@ -37,15 +39,16 @@
 		<script src="bower_components/angular-growl-v2/build/angular-growl.min.js"></script>
 		<!-- ng-d3matrix -->
 		<script src="bower_components/d3/d3.min.js"></script>
+		<script src="bower_components/d3-tip/index.js"></script>
 		<script src="bower_components/ng-d3matrix/dist/ng-d3matrix.min.js"></script>
 		<!-- angular-language-picker -->
 	    <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
 	    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-	    <script src="bower_components/angular-language-picker/dist/angular-language-picker.js"></script>
-	    <script src="bower_components/angular-language-picker/dist/angular-language-picker.templates.js"></script>
+		<script src="bower_components/angular-language-picker/dist/angular-language-picker.js" type="text/javascript"></script>
+		<script src="bower_components/angular-language-picker/dist/angular-language-picker.templates.js" type="text/javascript"></script>
 	    <!-- angular-translate -->
 		<script src="bower_components/angular-translate/angular-translate.js"></script>
-		<!-- angular-translate -->
+		<!-- angular-cookies -->
 		<script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
 		<!-- app related -->
 		<script src="js/app.js"></script>
