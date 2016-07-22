@@ -196,14 +196,23 @@ app.controller('stompgridController', ['$scope', '$rootScope', '$stomp', 'growl'
         var to = payload.to;
         var delay = payload.delay;
         var count = payload.count;
-        
+        var incremental = payload.incremental;
 
 
         if ($rootScope.localeCode == 'en-US') {
 
-            growl.info(from + ' => ' + to
-                + ' Count:' + count
-                + ' Delayed:' + delay + 'ms');
+            
+            if (incremental) {
+                growl.info(from + ' => ' + to
+                    + ' Count:' + count
+                    + ' Delayed:' + delay + 'ms');                
+            }
+            else {
+                growl.warning(from + ' => ' + to
+                    + ' Count:' + count); 
+            }
+
+
 
             $scope.model.rowCollection = payload.toptenlist;
 
@@ -217,15 +226,22 @@ app.controller('stompgridController', ['$scope', '$rootScope', '$stomp', 'growl'
 
             $translate([from, to, 'Count', 'Delayed'])
                 .then(function (translations) {
-                    console.log(JSON.stringify(translations));
-                    growl.info(translations[from] + ' => ' + translations[to]
-                        + ' ' + translations['Count'] + ':' + count
-                        + ' ' + translations['Delayed'] + ':' + delay + 'ms');
+                    // console.log(JSON.stringify(translations));
+
+                    if (incremental) {
+                        growl.info(translations[from] + ' => ' + translations[to]
+                            + ' ' + translations['Count'] + ':' + count
+                            + ' ' + translations['Delayed'] + ':' + delay + 'ms');            
+                    }
+                    else {
+                        growl.warning(translations[from] + ' => ' + translations[to]
+                            + ' ' + translations['Count'] + ':' + count); 
+                    }
                     
                 });
 
             translatePayload(payload).then(function(){
-                console.log(JSON.stringify(payload));
+                // console.log(JSON.stringify(payload));
                 
                 $scope.model.rowCollection = payload.toptenlist;
 
