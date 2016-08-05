@@ -6,15 +6,15 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
-    "angular": "1.5.7",
-    "angular-route": "1.5.7",
+    "angular": "~1.5.0",
+    "angular-route": "~1.5.0",
     "bootstrap": "3.3.*",
-    "ng-stomp-notify": "0.6.*",
+    "ng-stomp-notify": "~0.6.0",
     "ag-grid": "4.2.*",
     "angular-growl-v2": "0.7.9",
-    "ng-d3matrix": "0.1.*",
     "angular-translate": "^2.11.0",
     "angular-language-picker": "azachar/angular-language-picker#^0.3.3",
-    "angular-cookies": "^1.5.7"
+    "angular-cookies": "~1.5.0",
+    "ng-d3matrix": "^0.2.0"
   }
 }
