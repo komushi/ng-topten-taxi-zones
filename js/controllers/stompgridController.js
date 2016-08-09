@@ -347,7 +347,7 @@ app.controller('stompgridController', ['$scope', '$rootScope', '$stomp', 'growl'
         $scope.model = {}
 
         // $scope.model.url = 'ws://localhost:61623/';
-        $scope.model.url = 'http://127.0.0.1:8888/stomp';
+        $scope.model.url = 'http://127.0.0.1:9040/stomp';
         $scope.model.usr = 'guest';
         // $scope.model.usr = 'admin';
         $scope.model.pwd = 'guest';

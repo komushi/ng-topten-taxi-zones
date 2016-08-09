@@ -9,7 +9,8 @@ var app = angular.module('ngTopTenTaxiZonesApp', [
     'ngD3matrix',
     'pascalprecht.translate',
     'language-picker',
-    'app.services'
+    'app.services',
+    'ngD3geo'
 ]);
 
 
@@ -47,14 +48,18 @@ app.config(['$routeProvider', '$locationProvider', 'growlProvider', '$translateP
         $translateProvider.preferredLanguage('en-US');
 
 
-        $routeProvider.
-        when("/", {
-            redirectTo: '/stompgrid'
-        }).
-        when("/stompgrid", {
-            templateUrl: "views/stompgrid.html",
-            controller: "stompgridController"
-        });
+        $routeProvider
+            .when("/", {
+                redirectTo: '/stompgrid'
+            })
+            .when("/stompgrid", {
+                templateUrl: "views/stompgrid.html",
+                controller: "stompgridController"
+            })
+            .when("/tokyo23", {
+                templateUrl: "views/tokyo23.html",
+                controller: "tokyo23Controller"
+            });
 
     }
 ]);

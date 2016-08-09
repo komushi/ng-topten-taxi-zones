@@ -1,0 +1,41 @@
+<div>東京23区</div>
+<div class="container-fluid">
+  <div growl></div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div class="form-group">
+        <div class="btn-group" role="group" aria-label="...">
+          <button type="button" class="btn btn-default" ng-click="connect()">Connect</button>
+          <button type="button" class="btn btn-default" ng-click="disconnect()">Disconnect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-5 col-md-5">
+      <div class="panel panel-primary">
+        <div class="panel-heading">top_ten_list</div>
+        <div class="panel-body">
+          <div class="table-container">
+            <div ag-grid="gridOptions" class="ag-fresh" style="height: 100%; width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-7 col-md-7">
+      <div class="panel panel-primary">
+        <div class="panel-heading">top_ten_matrix</div>
+        <div class="panel-body">
+          <div adjacency-matrix
+            data="matrixJson"
+            width="480"
+            height="480"
+            json-path=""
+            color-range="#227AFF,#FFF500">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
