@@ -1,88 +1,3 @@
-
-var colorPaletteBlue = function (level) {
-
-    var color;
-
-    switch (level) {
-        case 0:
-            color = "#0d47a1";
-            break;
-        case 1:
-            color = "#1565c0";
-            break;
-        case 2:
-            color = "#1976d2";
-            break;
-        case 3:
-            color = "#1e88e5";
-            break;
-        case 4:
-            color = "#2196f3";
-            break;
-        case 5:
-            color = "#42a5f5";
-            break;
-        case 6:
-            color = "#64b5f6";
-            break;
-        case 7:
-            color = "#90caf9";
-            break;
-        case 8:
-            color = "#bbdefb";
-            break;
-        case 9:
-            color = "#e3f2fd";
-            break;
-    }
-    return {'background-color': color}
-};
-
-var colorPaletteSpectrum = function (level) {
-
-    var color;
-
-    switch (level) {
-        case 0:
-            color = "#f44336";
-            break;
-        case 1:
-            color = "#e91e63";
-            break;
-        case 2:
-            color = "#9c27b0";
-            break;
-        case 3:
-            color = "#673ab7";
-            break;
-        case 4:
-            color = "#3f51b5";
-            break;
-        case 5:
-            color = "#2196f3";
-            break;
-        case 6:
-            color = "#03a9f4";
-            break;
-        case 7:
-            color = "#00bcd4";
-            break;
-        case 8:
-            color = "#009688";
-            break;
-        case 9:
-            color = "#4caf50";
-            break;
-    }
-    return {'background-color': color}
-};
-
-
-var getLevel = function (currentPosition, totalLength) {
-
-    return Math.floor((currentPosition)/totalLength*10);
-};
-
 var app = angular.module('ngTopTenTaxiZonesApp');
 
 app.controller('tokyo23Controller', ['$scope', '$stomp', 'growl',
@@ -131,6 +46,8 @@ app.controller('tokyo23Controller', ['$scope', '$stomp', 'growl',
         $stomp.unsubscribe($scope.model.subdest);
     };
 
+    var color;
+
     // notify callback function
     var updateGridMatrix = function (res) {
 
@@ -162,10 +79,15 @@ app.controller('tokyo23Controller', ['$scope', '$stomp', 'growl',
         $scope.gridOptions.rowData = $scope.model.rowCollection;
         $scope.gridOptions.api.setRowData($scope.gridOptions.rowData);
 
-        $scope.matrixJson = payload.matrix;
+        $scope.model.matrixJson = payload.matrix;
+
+        color = d3.scale.linear().domain([1, $scope.model.rowCollection.length])
+                    .interpolate(d3.interpolateHcl)
+                    .range($scope.colorRange.split(","));
            
     };
 
+    
 
     var initialize = function () {
         $scope.model = {}
@@ -194,7 +116,6 @@ app.controller('tokyo23Controller', ['$scope', '$stomp', 'growl',
         ];
 
 
-
         $scope.gridOptions = {
             columnDefs: columnDefs,
             rowData: $scope.model.rowCollection,
@@ -202,11 +123,10 @@ app.controller('tokyo23Controller', ['$scope', '$stomp', 'growl',
                 event.api.sizeColumnsToFit();
             },
             getRowStyle: function(params) {
-                // var level = getLevel(params.data.rank - 1, $scope.model.rowCollection.length)
-                // return colorPaletteBlue(level);
-                var color = d3.scale.linear().domain([1, $scope.model.rowCollection.length])
+                color = d3.scale.linear().domain([1, $scope.model.rowCollection.length])
                             .interpolate(d3.interpolateHcl)
                             .range($scope.colorRange.split(","));
+
                 return {'background-color': color(params.data.rank)};
             }
         };

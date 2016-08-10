@@ -21,7 +21,7 @@ app.config(['$routeProvider', '$locationProvider', 'growlProvider', '$translateP
         // $locationProvider.hashPrefix = '#';
 
         // config growl
-        growlProvider.globalTimeToLive(5000);
+        growlProvider.globalTimeToLive(3000);
         growlProvider.onlyUniqueMessages(false);
         growlProvider.globalPosition('bottom-left');
 

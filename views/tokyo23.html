@@ -1,8 +1,9 @@
-<div>東京23区</div>
 <div class="container-fluid">
-  <div growl></div>
   <div class="row">
-    <div class="col-sm-12 col-md-12">
+    <div class="col-sm-1 col-md-1">
+      <h4>東京23区</h4>
+    </div>
+    <div class="col-sm-11 col-md-11">
       <div class="form-group">
         <div class="btn-group" role="group" aria-label="...">
           <button type="button" class="btn btn-default" ng-click="connect()">Connect</button>
@@ -24,18 +25,43 @@
     </div>
     <div class="col-sm-7 col-md-7">
       <div class="panel panel-primary">
+        <div class="panel-heading">events_map</div>
+        <div class="panel-body">
+          <div route-events-map
+            id="02"
+            data="model.rowCollection"
+            topojson-path="assets/tokyo_23_blocks_districts_final.json"
+            width="960"
+            height="960"
+            bg-color="#bbdefb"
+            color-range="#227AFF,#FFF500"
+            center="139.743268, 35.677043"
+            scale="150000"
+            layer-objects="blocks"
+            layer-feature-name="properties.block"
+            layer-feature-code="properties.block_code"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--   <div class="row">
+    <div class="col-sm-5 col-md-5">
+      <div class="panel panel-primary">
         <div class="panel-heading">top_ten_matrix</div>
         <div class="panel-body">
           <div adjacency-matrix
-            data="matrixJson"
-            width="480"
-            height="480"
+            data="model.matrixJson"
+            width="450"
+            height="450"
             json-path=""
             color-range="#227AFF,#FFF500">
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
+  <div growl></div>
 </div>
 
