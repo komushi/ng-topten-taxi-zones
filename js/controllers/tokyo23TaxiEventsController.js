@@ -1,6 +1,6 @@
 var app = angular.module('ngTopTenTaxiZonesApp');
 
-app.controller('tokyo23Controller', ['$scope', '$stomp', 'growl',
+app.controller('tokyo23TaxiEventsController', ['$scope', '$stomp', 'growl',
     function($scope, $stomp, growl){
 
     $scope.connect = function () {
@@ -13,8 +13,9 @@ app.controller('tokyo23Controller', ['$scope', '$stomp', 'growl',
                 
                 growl.success('Connected!');
                 console.log('Connected: ' + frame);
+// subscribe("/topic/transform_geotuple");
 
-                subscribe();
+                
             })
             .catch(function(reason) {
 
@@ -34,56 +35,49 @@ app.controller('tokyo23Controller', ['$scope', '$stomp', 'growl',
     };
 
     // Subscribe a queue
-    var subscribe = function () {
+    var subscribe = function (destination) {
         
+        $scope.destination = destination;
+
         var headers = {};
 
-        $stomp.subscribe($scope.model.subdest, headers).then(null,null,updateGridMatrix);
+        $stomp.subscribe(destination, headers).then(null, null, updateScreen);
     };
 
     // Unsubscribe a queue
     var unsubscribe = function () {
-        $stomp.unsubscribe($scope.model.subdest);
+        $stomp.unsubscribe($scope.destination);
+        $scope.destination = null;
     };
 
-    var color;
+    $scope.subEventsFrom = function (feature) {
+        console.log("subEventsFrom" + feature);
+        subscribe("/topic/" + feature);
+    };
+
+    $scope.unsubEvents = function () {
+        unsubscribe();
+    };
+
 
     // notify callback function
-    var updateGridMatrix = function (res) {
+    var updateScreen = function (res) {
 
         var payload = JSON.parse(JSON.parse(res.body).payload);
-
         console.log(JSON.stringify(payload));
+        
+        $scope.taxiEvents = [[payload.dropoffLongitude, payload.dropoffLatitude]];
 
-        var msgTimestamp = payload.timestamp;
-        var msgDate = new Date(msgTimestamp);
-        var from = payload.from;
-        var to = payload.to;
-        var delay = payload.delay;
-        var count = payload.count;
-        var incremental = payload.incremental;
+        
 
-            
-        if (incremental) {
-            growl.info(from + ' => ' + to
-                + ' Count:' + count
-                + ' Delayed:' + delay + 'ms');                
-        }
-        else {
-            growl.warning(from + ' => ' + to
-                + ' Count:' + count); 
-        }
+        // $scope.model.rowCollection = payload.toptenlist;
+        // $scope.gridOptions.rowData = $scope.model.rowCollection;
+        // $scope.gridOptions.api.setRowData($scope.gridOptions.rowData);
 
-        $scope.model.rowCollection = payload.toptenlist;
 
-        $scope.gridOptions.rowData = $scope.model.rowCollection;
-        $scope.gridOptions.api.setRowData($scope.gridOptions.rowData);
-
-        $scope.model.matrixJson = payload.matrix;
-
-        color = d3.scale.linear().domain([1, $scope.model.rowCollection.length])
-                    .interpolate(d3.interpolateHcl)
-                    .range($scope.colorRange.split(","));
+        // var color = d3.scale.linear().domain([1, $scope.model.rowCollection.length])
+        //             .interpolate(d3.interpolateHcl)
+        //             .range($scope.colorRange.split(","));
            
     };
 
@@ -93,16 +87,13 @@ app.controller('tokyo23Controller', ['$scope', '$stomp', 'growl',
         $scope.model = {}
 
         // $scope.model.url = 'ws://localhost:61623/';
-        $scope.model.url = 'http://127.0.0.1:9040/stomp';
+        $scope.model.url = 'http://127.0.0.1:9110/stomp';
         $scope.model.usr = 'guest';
-        // $scope.model.usr = 'admin';
         $scope.model.pwd = 'guest';
-        // $scope.model.pwd = 'password';
         $scope.model.subdest = '/topic/topten';
-        // $scope.model.pubdest = '/topic/dest';
-        // $scope.model.payload = '{"name":"Tom", "type":"Type0", "sales":50}';
-        $scope.model.headers = '{}';
 
+
+/*
         // setup for ag-grid
         $scope.model.rowCollection = [];
 
@@ -130,7 +121,7 @@ app.controller('tokyo23Controller', ['$scope', '$stomp', 'growl',
                 return {'background-color': color(params.data.rank)};
             }
         };
-
+*/
     };
 
     initialize();

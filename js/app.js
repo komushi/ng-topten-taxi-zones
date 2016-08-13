@@ -56,11 +56,14 @@ app.config(['$routeProvider', '$locationProvider', 'growlProvider', '$translateP
                 templateUrl: "views/stompgrid.html",
                 controller: "stompgridController"
             })
-            .when("/tokyo23", {
-                templateUrl: "views/tokyo23.html",
-                controller: "tokyo23Controller"
+            .when("/tokyo23TaxiEvents", {
+                templateUrl: "views/tokyo23TaxiEvents.html",
+                controller: "tokyo23TaxiEventsController"
+            })
+            .when("/tokyo23TopRoutes", {
+                templateUrl: "views/tokyo23TopRoutes.html",
+                controller: "tokyo23TopRoutesController"
             });
-
     }
 ]);
 

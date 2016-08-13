@@ -20,7 +20,8 @@
 		<div class="container-fluid" ng-controller="mainCtrl">
 			<ol class="breadcrumb">
 			  	<li><a href="#/stompgrid">{{'stompgrid_title' | translate}}</a></li>
-			  	<li><a href="#/tokyo23">tokyo23</a></li>
+			  	<li><a href="#/tokyo23TopRoutes">Tokyo 23 Top Routes</a></li>
+			  	<li><a href="#/tokyo23TaxiEvents">Tokyo 23 Taxi Events</a></li>
 				<li>
 					<language-picker languages="['en-US', 'ja-JP']" on-change="changeLanguage(language.code)">{{'Language' | translate}}</language-picker>
 				</li>
@@ -62,7 +63,8 @@
 		<!-- app related -->
 		<script src="js/app.js"></script>
 		<script src="js/controllers/stompgridController.js"></script>
-		<script src="js/controllers/tokyo23Controller.js"></script>
+		<script src="js/controllers/tokyo23TopRoutesController.js"></script>
+		<script src="js/controllers/tokyo23TaxiEventsController.js"></script>
 		<script src="js/services/services.js"></script>
 	    <script src="js/services/dataService.js"></script>
 	    <script src="js/services/asyncTranslator.js"></script>
