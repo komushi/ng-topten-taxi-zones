@@ -29,11 +29,10 @@
         <div class="panel-body">
           <div 2layer-map
             id="01"
-            data="taxiEvents"
             topojson-path="assets/tokyo_23_blocks_districts_final.json"
             width="800"
             height="800"
-            layer1-color-range="#0d47a1,#e3f2fd"
+            layer1-color-range="#1976d2,#fff176"
             center="139.752268, 35.677043"
             scale="110000"
             layer1-objects="districts"
@@ -42,6 +41,8 @@
             layer1-feature-code="properties.district_code"
             layer2-feature-name="properties.block"
             layer2-feature-code="properties.block_code"
+            layer1-event-data="districtRank"
+            layer2-event-data="taxiEvents"
             on-receive-events="subEventsFrom(feature)"
             on-stop-events="unsubEvents()"
             >

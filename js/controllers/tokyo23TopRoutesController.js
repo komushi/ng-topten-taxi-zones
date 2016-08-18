@@ -5,10 +5,10 @@ app.controller('tokyo23TopRoutesController', ['$scope', '$stomp', 'growl',
 
     $scope.connect = function () {
         var connectHeaders = {};
-        connectHeaders.login = $scope.model.usr;
-        connectHeaders.passcode = $scope.model.pwd;
+        connectHeaders.login = $scope.stomp.usr;
+        connectHeaders.passcode = $scope.stomp.pwd;
 
-        $stomp.connect($scope.model.url, connectHeaders)
+        $stomp.connect($scope.stomp.name, $scope.stomp.url, connectHeaders)
             .then(function (frame) {
                 
                 growl.success('Connected!');
@@ -26,7 +26,7 @@ app.controller('tokyo23TopRoutesController', ['$scope', '$stomp', 'growl',
 
     // Disconnect
     $scope.disconnect = function () {
-        $stomp.disconnect().then(
+        $stomp.disconnect($scope.stomp.name).then(
             function () {
                 console.log('Disconnected');
                 growl.warning('Disconnected!');
@@ -38,15 +38,13 @@ app.controller('tokyo23TopRoutesController', ['$scope', '$stomp', 'growl',
         
         var headers = {};
 
-        $stomp.subscribe($scope.model.subdest, headers).then(null,null,updateGridMatrix);
+        $stomp.subscribe($scope.stomp.name, $scope.stomp.destination, headers).then(null,null,updateGridMatrix);
     };
 
     // Unsubscribe a queue
     var unsubscribe = function () {
-        $stomp.unsubscribe($scope.model.subdest);
+        $stomp.unsubscribe($scope.stomp.name, $scope.stomp.destination);
     };
-
-    var color;
 
     // notify callback function
     var updateGridMatrix = function (res) {
@@ -79,34 +77,41 @@ app.controller('tokyo23TopRoutesController', ['$scope', '$stomp', 'growl',
         $scope.gridOptions.rowData = $scope.model.rowCollection;
         $scope.gridOptions.api.setRowData($scope.gridOptions.rowData);
 
-        $scope.model.matrixJson = payload.matrix;
+        // $scope.model.matrixJson = payload.matrix;
 
-        color = d3.scale.linear().domain([1, $scope.model.rowCollection.length])
-                    .interpolate(d3.interpolateHcl)
-                    .range($scope.colorRange.split(","));
+        // color = d3.scale.linear().domain([1, $scope.stomp.rowCollection.length])
+        //             .interpolate(d3.interpolateHcl)
+        //             .range($scope.colorRange.split(","));
            
     };
 
     
 
     var initialize = function () {
-        $scope.model = {}
+        $scope.stomp = {}
 
-        // $scope.model.url = 'ws://localhost:61623/';
-        $scope.model.url = 'http://127.0.0.1:9040/stomp';
-        $scope.model.usr = 'guest';
-        // $scope.model.usr = 'admin';
-        $scope.model.pwd = 'guest';
-        // $scope.model.pwd = 'password';
-        $scope.model.subdest = '/topic/topten';
-        // $scope.model.pubdest = '/topic/dest';
-        // $scope.model.payload = '{"name":"Tom", "type":"Type0", "sales":50}';
-        $scope.model.headers = '{}';
+        // $scope.stomp.url = 'ws://localhost:61623/';
+        // $scope.stomp.usr = 'admin';
+        // $scope.stomp.pwd = 'password';
+        $scope.stomp.url = 'http://127.0.0.1:9400/stomp';
+        $scope.stomp.usr = 'guest';
+        $scope.stomp.pwd = 'guest';
+        $scope.stomp.destination = '/topic/toproute';
+        $scope.stomp.name = 'TopRoute';
+        $scope.stomp.headers = '{}';
 
         // setup for ag-grid
+        $scope.model = {}
         $scope.model.rowCollection = [];
 
         $scope.colorRange='#227AFF,#FFF500';
+
+        $scope.topNumber = 10;
+
+        var color = d3.scale.linear().domain([1, $scope.topNumber])
+                        .interpolate(d3.interpolateHcl)
+                        .range($scope.colorRange.split(","));
+
 
         var columnDefs = [
             {headerName: "Rank", field: "rank", width: 60},
@@ -118,15 +123,11 @@ app.controller('tokyo23TopRoutesController', ['$scope', '$stomp', 'growl',
 
         $scope.gridOptions = {
             columnDefs: columnDefs,
-            rowData: $scope.model.rowCollection,
+            rowData: $scope.stomp.rowCollection,
             onGridReady: function(event) {
                 event.api.sizeColumnsToFit();
             },
             getRowStyle: function(params) {
-                color = d3.scale.linear().domain([1, $scope.model.rowCollection.length])
-                            .interpolate(d3.interpolateHcl)
-                            .range($scope.colorRange.split(","));
-
                 return {'background-color': color(params.data.rank)};
             }
         };

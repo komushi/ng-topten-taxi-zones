@@ -5,10 +5,10 @@ app.controller('tokyo23TaxiEventsController', ['$scope', '$stomp', 'growl',
 
     $scope.connect = function () {
         var connectHeaders = {};
-        connectHeaders.login = $scope.model.usr;
-        connectHeaders.passcode = $scope.model.pwd;
+        connectHeaders.login = $scope.stomp.taxiEvents.usr;
+        connectHeaders.passcode = $scope.stomp.taxiEvents.pwd;
 
-        $stomp.connect($scope.model.url, connectHeaders)
+        $stomp.connect($scope.stomp.taxiEvents.name, $scope.stomp.taxiEvents.url, connectHeaders)
             .then(function (frame) {
                 
                 growl.success('Connected!');
@@ -27,7 +27,7 @@ app.controller('tokyo23TaxiEventsController', ['$scope', '$stomp', 'growl',
 
     // Disconnect
     $scope.disconnect = function () {
-        $stomp.disconnect().then(
+        $stomp.disconnect($scope.stomp.taxiEvents.name).then(
             function () {
                 console.log('Disconnected');
                 growl.warning('Disconnected!');
@@ -41,17 +41,17 @@ app.controller('tokyo23TaxiEventsController', ['$scope', '$stomp', 'growl',
 
         var headers = {};
 
-        $stomp.subscribe(destination, headers).then(null, null, updateScreen);
+        $stomp.subscribe($scope.stomp.taxiEvents.name, destination, headers).then(null, null, updateScreen);
     };
 
     // Unsubscribe a queue
     var unsubscribe = function () {
-        $stomp.unsubscribe($scope.destination);
+        $stomp.unsubscribe($scope.stomp.taxiEvents.name, $scope.destination);
         $scope.destination = null;
     };
 
     $scope.subEventsFrom = function (feature) {
-        console.log("subEventsFrom" + feature);
+        console.log("Subscribe Events From Feature " + feature);
         subscribe("/topic/" + feature);
     };
 
@@ -84,15 +84,53 @@ app.controller('tokyo23TaxiEventsController', ['$scope', '$stomp', 'growl',
     
 
     var initialize = function () {
-        $scope.model = {}
+        $scope.stomp = {};
+        $scope.stomp.taxiEvents = {};
 
-        // $scope.model.url = 'ws://localhost:61623/';
-        $scope.model.url = 'http://127.0.0.1:9110/stomp';
-        $scope.model.usr = 'guest';
-        $scope.model.pwd = 'guest';
-        $scope.model.subdest = '/topic/topten';
+        $scope.stomp.taxiEvents.url = 'http://127.0.0.1:9210/stomp';
+        $scope.stomp.taxiEvents.usr = 'guest';
+        $scope.stomp.taxiEvents.pwd = 'guest';
+        $scope.stomp.taxiEvents.name = 'TaxiEvents';
 
+/*
+        var connectHeaders = {};
+        connectHeaders.login = $scope.model.usr;
+        connectHeaders.passcode = $scope.model.pwd;
 
+        $stomp.connect('http://127.0.0.1:9410/stomp', connectHeaders)
+            .then(function (frame) {
+                
+                growl.success('Connected!');
+                console.log('Connected: ' + frame);
+                sub("/topic/topdropoff");
+                
+            })
+            .catch(function(reason) {
+
+                growl.error('Connection error:' + reason);
+                console.error('Connection error:', reason);
+
+            });
+
+        var sub = function (destination) {
+            
+            $scope.destination = destination;
+
+            var headers = {};
+
+            $stomp.subscribe(destination, headers).then(null, null, updateMap);
+        };
+
+        var updateMap = function (res) {
+
+            var payload = JSON.parse(JSON.parse(res.body).payload);
+            console.log(JSON.stringify(payload.toplist));
+            
+            $scope.districtRank = payload.toplist;
+
+               
+        };
+*/
 /*
         // setup for ag-grid
         $scope.model.rowCollection = [];

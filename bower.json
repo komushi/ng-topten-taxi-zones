@@ -9,7 +9,7 @@
     "angular": "~1.5.0",
     "angular-route": "~1.5.0",
     "bootstrap": "3.3.*",
-    "ng-stomp-notify": "~0.6.0",
+    "ng-stomp-notify": "~0.7.0",
     "ag-grid": "4.2.*",
     "angular-growl-v2": "0.7.9",
     "angular-translate": "^2.11.0",

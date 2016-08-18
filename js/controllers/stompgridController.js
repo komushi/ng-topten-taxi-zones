@@ -128,10 +128,10 @@ app.controller('stompgridController', ['$scope', '$rootScope', '$stomp', 'growl'
 
     $scope.connect = function () {
         var connectHeaders = {};
-        connectHeaders.login = $scope.model.usr;
-        connectHeaders.passcode = $scope.model.pwd;
+        connectHeaders.login = $scope.stomp.usr;
+        connectHeaders.passcode = $scope.stomp.pwd;
 
-        $stomp.connect($scope.model.url, connectHeaders)
+        $stomp.connect($scope.stomp.name, $scope.stomp.url, connectHeaders)
             .then(function (frame) {
                 
                 growl.success('Connected!');
@@ -149,7 +149,7 @@ app.controller('stompgridController', ['$scope', '$rootScope', '$stomp', 'growl'
 
     // Disconnect
     $scope.disconnect = function () {
-        $stomp.disconnect().then(
+        $stomp.disconnect($scope.stomp.name).then(
             function () {
                 console.log('Disconnected');
                 growl.warning('Disconnected!');
@@ -175,12 +175,12 @@ app.controller('stompgridController', ['$scope', '$rootScope', '$stomp', 'growl'
         
         var headers = {};
 
-        $stomp.subscribe($scope.model.subdest, headers).then(null,null,updateGridMatrix);
+        $stomp.subscribe($scope.stomp.name, $scope.stomp.destination, headers).then(null,null,updateGridMatrix);
     };
 
     // Unsubscribe a queue
     var unsubscribe = function () {
-        $stomp.unsubscribe($scope.model.subdest);
+        $stomp.unsubscribe($scope.stomp.name, f$scope.stomp.destination);
     };
 
     // notify callback function
@@ -219,7 +219,7 @@ app.controller('stompgridController', ['$scope', '$rootScope', '$stomp', 'growl'
             $scope.gridOptions.rowData = $scope.model.rowCollection;
             $scope.gridOptions.api.setRowData($scope.gridOptions.rowData);
 
-            $scope.matrixJson = payload.matrix;
+            $scope.model.matrixJson = payload.matrix;
         } 
         else {
             lazyTranslateInit(payload);
@@ -248,7 +248,7 @@ app.controller('stompgridController', ['$scope', '$rootScope', '$stomp', 'growl'
                 $scope.gridOptions.rowData = $scope.model.rowCollection;
                 $scope.gridOptions.api.setRowData($scope.gridOptions.rowData);
 
-                $scope.matrixJson = payload.matrix;
+                $scope.model.matrixJson = payload.matrix;
             });
         }        
     };
@@ -344,20 +344,17 @@ app.controller('stompgridController', ['$scope', '$rootScope', '$stomp', 'growl'
     }
 
     var initialize = function () {
-        $scope.model = {}
+        $scope.stomp = {}
 
-        // $scope.model.url = 'ws://localhost:61623/';
-        $scope.model.url = 'http://127.0.0.1:9040/stomp';
-        $scope.model.usr = 'guest';
-        // $scope.model.usr = 'admin';
-        $scope.model.pwd = 'guest';
-        // $scope.model.pwd = 'password';
-        $scope.model.subdest = '/topic/topten';
-        // $scope.model.pubdest = '/topic/dest';
-        // $scope.model.payload = '{"name":"Tom", "type":"Type0", "sales":50}';
-        $scope.model.headers = '{}';
+        $scope.stomp.url = 'http://127.0.0.1:9040/stomp';
+        $scope.stomp.usr = 'guest';
+        $scope.stomp.pwd = 'guest';
+        $scope.stomp.destination = '/topic/toprouteus';
+        $scope.stomp.name = 'TopRouteUS';
+        $scope.stomp.headers = '{}';
 
         // setup for ag-grid
+        $scope.model = {}
         $scope.model.rowCollection = [];
 
         var columnDefs = [
