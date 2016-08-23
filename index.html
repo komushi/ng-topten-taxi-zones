@@ -19,9 +19,9 @@
 
 		<div class="container-fluid" ng-controller="mainCtrl">
 			<ol class="breadcrumb">
+			  	<li><a href="#/tokyo23TaxiEvents">{{'taxi_events_title' | translate}}</a></li>
+			  	<li><a href="#/tokyo23TopRoutes">{{'taxi_routes_title' | translate}}</a></li>
 			  	<li><a href="#/stompgrid">{{'stompgrid_title' | translate}}</a></li>
-			  	<li><a href="#/tokyo23TopRoutes">Tokyo 23 Top Routes</a></li>
-			  	<li><a href="#/tokyo23TaxiEvents">Tokyo 23 Taxi Events</a></li>
 				<li>
 					<language-picker languages="['en-US', 'ja-JP']" on-change="changeLanguage(language.code)">{{'Language' | translate}}</language-picker>
 				</li>
@@ -35,7 +35,7 @@
 		<!-- ngStomp -->
 		<script src="bower_components/sockjs-client/dist/sockjs.min.js"></script>
 		<script src="bower_components/stomp-websocket/lib/stomp.js"></script>
-		<script src="bower_components/ng-stomp-notify/dist/ng-stomp.min.js"></script>
+		<script src="bower_components/ng-stomp-notify/src/ng-stomp.js"></script>
 		<!-- ag-grid -->
 		<script src="bower_components/ag-grid/dist/ag-grid.min.js"></script>
 		<!-- angular-growl-v2 -->

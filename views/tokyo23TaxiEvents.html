@@ -1,40 +1,26 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-sm-1 col-md-1">
-      <h4>東京23区</h4>
-    </div>
-    <div class="col-sm-11 col-md-11">
+    <div class="col-sm-2 col-md-2">
       <div class="form-group">
+        <h5>イベント受信</h5>
         <div class="btn-group" role="group" aria-label="...">
-          <button type="button" class="btn btn-default" ng-click="connect()">Connect</button>
-          <button type="button" class="btn btn-default" ng-click="disconnect()">Disconnect</button>
+          <button type="button" class="btn btn-default" ng-click="connect()">{{'Connect' | translate}}</button>
+          <button type="button" class="btn btn-default" ng-click="disconnect()">{{'Disconnect' | translate}}</button>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-5 col-md-5">
+    <div class="col-sm-10 col-md-10">
       <div class="panel panel-primary">
-        <div class="panel-heading">top_ten_list</div>
+        <div class="panel-heading">東京２３区　リアルタイム・タクシー降車イベント</div>
         <div class="panel-body">
-          <div class="table-container">
-            <div ag-grid="gridOptions" class="ag-fresh" style="height: 100%; width: 100%;"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-7 col-md-7">
-      <div class="panel panel-primary">
-        <div class="panel-heading">events_map</div>
-        <div class="panel-body">
-          <div 2layer-map
+          <div 2layer-events-map
             id="01"
             topojson-path="assets/tokyo_23_blocks_districts_final.json"
             width="800"
             height="800"
-            layer1-color-range="#1976d2,#fff176"
-            center="139.752268, 35.677043"
-            scale="110000"
+            layer1-color-range="#e3f2fd,#2196f3,#0d47a1"
+            center="139.752268, 35.657043"
+            scale="115000"
             layer1-objects="districts"
             layer2-objects="blocks"
             layer1-feature-name="properties.district"
@@ -43,8 +29,10 @@
             layer2-feature-code="properties.block_code"
             layer1-event-data="districtRank"
             layer2-event-data="taxiEvents"
-            on-receive-events="subEventsFrom(feature)"
-            on-stop-events="unsubEvents()"
+            layer1-event-count-tag="dropoffCount"
+            layer1-legend-title="３０分以内の降車イベント"
+            on-receive-events="subTaxiEventsFrom(feature)"
+            on-stop-events="unsubTaxiEvents()"
             >
           </div>
         </div>

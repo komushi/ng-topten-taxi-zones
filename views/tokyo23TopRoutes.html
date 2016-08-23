@@ -1,21 +1,15 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-sm-1 col-md-1">
-      <h4>東京23区</h4>
-    </div>
-    <div class="col-sm-11 col-md-11">
+    <div class="col-sm-4 col-md-4">
       <div class="form-group">
+        <h5>イベント受信</h5>
         <div class="btn-group" role="group" aria-label="...">
-          <button type="button" class="btn btn-default" ng-click="connect()">Connect</button>
-          <button type="button" class="btn btn-default" ng-click="disconnect()">Disconnect</button>
+          <button type="button" class="btn btn-default" ng-click="connect()">{{'Connect' | translate}}</button>
+          <button type="button" class="btn btn-default" ng-click="disconnect()">{{'Disconnect' | translate}}</button>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-5 col-md-5">
       <div class="panel panel-primary">
-        <div class="panel-heading">top_ten_list</div>
+        <div class="panel-heading">東京２３区　町域レベル　トップ１０ルート（乗車ー＞降車）リスト</div>
         <div class="panel-body">
           <div class="table-container">
             <div ag-grid="gridOptions" class="ag-fresh" style="height: 100%; width: 100%;"></div>
@@ -23,21 +17,21 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-7 col-md-7">
+    <div class="col-sm-8 col-md-8">
       <div class="panel panel-primary">
-        <div class="panel-heading">events_map</div>
+        <div class="panel-heading">東京２３区　町域レベル　トップ１０ルート（乗車ー＞降車）マップ</div>
         <div class="panel-body">
           <div route-events-map
             id="02"
-            data="model.rowCollection"
+            layer-event-data="model.rowCollection"
             topojson-path="assets/tokyo_23_blocks_districts_final.json"
-            width="960"
-            height="960"
+            width="800"
+            height="800"
             bg-color="#bbdefb"
             color-range="#227AFF,#FFF500"
             top-number="10"
             center="139.743268, 35.677043"
-            scale="150000"
+            scale="125000"
             layer-objects="blocks"
             layer-feature-name="properties.block"
             layer-feature-code="properties.block_code"
@@ -47,22 +41,6 @@
       </div>
     </div>
   </div>
-<!--   <div class="row">
-    <div class="col-sm-5 col-md-5">
-      <div class="panel panel-primary">
-        <div class="panel-heading">top_ten_matrix</div>
-        <div class="panel-body">
-          <div adjacency-matrix
-            data="model.matrixJson"
-            width="450"
-            height="450"
-            json-path=""
-            color-range="#227AFF,#FFF500">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
   <div growl></div>
 </div>
 

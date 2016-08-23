@@ -112,6 +112,20 @@ app.controller('tokyo23TopRoutesController', ['$scope', '$stomp', 'growl',
                         .interpolate(d3.interpolateHcl)
                         .range($scope.colorRange.split(","));
 
+        var cellStyle = {'color': 'white',
+                        'opacity': '1',
+                        'font-family': ['Noto Sans Japanese','Klee'], 
+                        'font-weight':'700',
+                        'font-size': '16px',
+                        'text-anchor': 'middle',
+                        'text-shadow': ['2px 2px 0 #000',
+                                        '-1px -1px 0 #000',  
+                                        '1px -1px 0 #000',
+                                        '-1px 1px 0 #000',
+                                         '1px 1px 0 #000']
+                        };
+
+
 
         var columnDefs = [
             {headerName: "Rank", field: "rank", width: 60},
@@ -119,7 +133,6 @@ app.controller('tokyo23TopRoutesController', ['$scope', '$stomp', 'growl',
             {headerName: "To", field: "to"},
             {headerName: "Count", field: "count", width: 60}
         ];
-
 
         $scope.gridOptions = {
             columnDefs: columnDefs,
