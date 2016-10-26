@@ -42,6 +42,9 @@ java -jar spring-cloud-stream-sink-stomp-multi-topic-0.0.1-SNAPSHOT.jar --loggin
 ```
 
 ## Temp - remove to demo guide later
+
+java -jar target/spring-boot-geode-server-0.0.1-SNAPSHOT.jar --properties.batchSize=5
+
 ## 1. Tokyo 23 Top Routes
 ## 1-1. Sending data and transfrom
 ```

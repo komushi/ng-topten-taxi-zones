@@ -54,7 +54,7 @@ app.config(['$routeProvider', '$locationProvider', 'growlProvider', '$translateP
 
         $routeProvider
             .when("/", {
-                redirectTo: '/stompgrid'
+                redirectTo: '/tokyo23TaxiEvents'
             })
             .when("/stompgrid", {
                 templateUrl: "views/stompgrid.html",
